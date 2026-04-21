@@ -4,8 +4,8 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   build: {
-    // TF.js is legitimately large (~800 KB gzipped); raise the warning threshold
-    chunkSizeWarningLimit: 1200,
+    // TF.js is legitimately large; raise the warning threshold
+    chunkSizeWarningLimit: 2000,
   },
   plugins: [
     react(),
