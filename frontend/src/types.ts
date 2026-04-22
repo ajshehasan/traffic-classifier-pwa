@@ -24,7 +24,9 @@ export interface ClassificationRecord {
   timestamp: number
   features: ConnectionFeatures
   prediction: Prediction
-  source: 'classify' | 'quiz'
+  source: 'classify' | 'quiz' | 'csv_batch'
+  batch_id?: string
+  batch_size?: number
 }
 
 export interface QuizAnswer {

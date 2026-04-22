@@ -1,0 +1,31 @@
+proto,service,duration,src_bytes,dst_bytes,http_method,http_uri,http_status_code,http_user_agent
+tcp,http,0.23,512,8192,GET,/index.html,200,Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0
+tcp,http,0.45,1024,32768,GET,/api/products?page=1&limit=20,200,Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/537.36
+tcp,http,1.12,2048,65536,POST,/api/login,200,Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/119.0
+tcp,ssl,0.08,256,512,GET,/favicon.ico,200,Mozilla/5.0 (iPhone; CPU iPhone OS 17_0) AppleWebKit/605.1.15
+tcp,http,0.34,4096,16384,GET,/dashboard,302,Mozilla/5.0 (Windows NT 10.0) Gecko/20100101 Firefox/121.0
+tcp,http,0.67,1536,49152,POST,/api/upload,200,Mozilla/5.0 (Macintosh; Intel Mac OS X 13_2) Chrome/120.0
+tcp,http,0.19,384,2048,GET,/static/app.js,200,Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0
+tcp,ssl,2.31,8192,131072,GET,/api/reports/monthly,200,Mozilla/5.0 (X11; Ubuntu; Linux x86_64) Firefox/120.0
+tcp,http,0.11,128,4096,GET,/health,200,Go-http-client/1.1
+tcp,http,0.52,3072,24576,POST,/api/comments,201,Mozilla/5.0 (Windows NT 10.0) Chrome/120.0
+tcp,http,0.29,640,8704,GET,/api/users/profile,200,Mozilla/5.0 (iPad; CPU OS 16_6) AppleWebKit/605.1.15
+tcp,ssl,0.14,256,1024,GET,/robots.txt,200,Googlebot/2.1 (+http://www.google.com/bot.html)
+tcp,http,0.73,2560,40960,PUT,/api/settings,200,Mozilla/5.0 (Macintosh; Intel Mac OS X) Safari/537.36
+tcp,http,0.09,192,384,GET,/ping,200,curl/7.88.1
+tcp,http,1.45,5120,81920,GET,/api/analytics?from=2024-01-01&to=2024-01-31,200,Mozilla/5.0 (Windows NT 10.0) Edge/120.0
+tcp,http,0.38,896,12288,DELETE,/api/sessions/abc123,204,Mozilla/5.0 (Linux; Android 14) Chrome/120.0
+tcp,http,0.21,448,3584,GET,/api/notifications,200,Mozilla/5.0 (iPhone; CPU iPhone OS 17_1) WebKit/605.1
+tcp,ssl,0.06,128,256,OPTIONS,/api/cors-preflight,204,Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0
+tcp,http,0.01,320,480,GET,/api/search?q=SELECT * FROM users WHERE 1=1,200,Mozilla/5.0 (Windows NT 10.0) Chrome/118.0
+tcp,http,0.02,280,320,GET,/login?user=admin'--&pass=anything,200,Mozilla/5.0 (compatible; MSIE 9.0)
+tcp,http,0.03,410,390,POST,/api/data?id=1 UNION SELECT username,password FROM users--,200,Mozilla/5.0 Chrome/115.0
+tcp,http,0.02,350,310,GET,/products?cat=1;SELECT PG_SLEEP(5)--,200,python-requests/2.28.0
+tcp,http,0.01,290,270,GET,/search?q='; DROP TABLE users; --,200,Mozilla/5.0 Firefox/110.0
+tcp,http,0.02,330,290,POST,/api/filter?sort=id OR 1=1,200,Mozilla/5.0 Chrome/116.0
+tcp,http,0.02,260,240,GET,/page?id=<script>alert(document.cookie)</script>,200,Mozilla/5.0 Chrome/117.0
+tcp,http,0.01,300,280,GET,/search?q=<img src=x onerror=alert(1)>,200,Mozilla/5.0 Firefox/115.0
+tcp,http,0.02,340,300,POST,/comment?text=javascript:alert('XSS'),200,Mozilla/5.0 Chrome/118.0
+tcp,http,0.02,240,220,GET,/files?path=../../etc/passwd,200,Mozilla/5.0 Firefox/112.0
+tcp,http,0.01,270,250,GET,/download?file=/windows/system32/config/sam,200,Mozilla/5.0 Chrome/114.0
+tcp,http,0.02,310,290,GET,/admin/exec?cmd=;ls -la,200,sqlmap/1.7.8#stable (https://sqlmap.org)

@@ -96,10 +96,36 @@ Training notebook: [Open in Colab](https://colab.research.google.com/drive/12hRj
 | `/`         | Live prediction on a random example; streak banner; stat mini-cards |
 | `/learn`    | Browse all 30 examples grouped by class (benign / web_attack)       |
 | `/quiz`     | 10-question practice — answer, then see the model's prediction      |
-| `/classify` | Enter your own connection fields and get a real model prediction    |
+| `/classify` | Single connection form **or** CSV batch upload (see below)          |
 | `/stats`    | Confusion matrix, 7-day activity chart, accuracy and streak         |
 | `/history`  | Paginated table of all past classifications and quiz answers        |
 | `/settings` | localStorage preferences + IndexedDB data management                |
+
+---
+
+## CSV batch classification
+
+Upload a CSV of connections to classify in bulk from the **Classify** page → **Upload CSV** tab.
+
+A sample file at [`/examples/sample-traffic.csv`](frontend/public/examples/sample-traffic.csv) demonstrates the expected format (30 rows — 18 benign, 12 attacks across SQL injection, XSS, path traversal, command injection, and attack-tool user-agents).
+
+**Expected columns** (header row required):
+
+| Column | Required | Example |
+|---|---|---|
+| `proto` | ✓ | `tcp` / `udp` / `icmp` |
+| `service` | ✓ | `http` / `ssl` / `dns` |
+| `duration` | ✓ | `0.45` |
+| `src_bytes` | ✓ | `1024` |
+| `dst_bytes` | ✓ | `32768` |
+| `http_method` | optional | `GET` |
+| `http_uri` | optional | `/api/login` |
+| `http_status_code` | optional | `200` |
+| `http_user_agent` | optional | `Mozilla/5.0 …` |
+
+Each row is processed through the full **rule-layer → neural-network → hybrid** pipeline. Results are shown in a filterable table (All / Attacks / Benign) with per-row classifier source labels (Rule / Neural network / Hybrid), and saved to IndexedDB grouped by `batch_id` so they appear in History under the **Batch** filter.
+
+Processing is capped at 500 rows for in-browser performance. Export the annotated results via **Download results CSV**.
 
 ---
 
