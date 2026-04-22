@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const NAV = [
   { to: '/', label: 'Home', exact: true },
@@ -13,9 +13,6 @@ const NAV = [
 
 export default function Header() {
   const [open, setOpen] = useState(false)
-  const location = useLocation()
-
-  // Close menu on navigation
   const close = () => setOpen(false)
 
   const linkCls = (isActive: boolean) =>
