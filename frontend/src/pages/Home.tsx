@@ -148,7 +148,7 @@ export default function Home() {
       </div>
 
       {/* Stat mini-cards */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-center">
           <div className="text-2xl font-bold text-slate-900 dark:text-white">{stats.accuracy}%</div>
           <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Quiz accuracy</div>

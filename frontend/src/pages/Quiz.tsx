@@ -127,7 +127,7 @@ export default function Quiz() {
           </div>
 
           {/* Choices */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {choices.map(cls => {
               const isCorrect = cls === question.label
               const isChosen = cls === answered

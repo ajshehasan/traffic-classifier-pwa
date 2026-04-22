@@ -11,11 +11,26 @@ export default function Learn() {
 
   const visible = selected ? examples.filter(e => e.label === selected) : examples
 
+  const filterBtn = (active: boolean, mono = false) =>
+    `px-4 py-1.5 rounded-full text-sm border transition-colors shrink-0 ${mono ? 'font-mono' : ''} ${
+      active
+        ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white'
+        : 'border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+    }`
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
+      {/* Mobile: horizontal scroll pills */}
+      <div className="flex gap-2 overflow-x-auto pb-2 md:hidden mb-4 -mx-4 px-4">
+        <button onClick={() => setSelected(null)} className={filterBtn(selected === null)}>All</button>
+        {ALL_CLASSES.map(cls => (
+          <button key={cls} onClick={() => setSelected(cls)} className={filterBtn(selected === cls, true)}>{cls}</button>
+        ))}
+      </div>
+
       <div className="flex gap-6">
-        {/* Sidebar */}
-        <aside className="w-40 shrink-0 space-y-1">
+        {/* Sidebar — desktop only */}
+        <aside className="hidden md:block w-40 shrink-0 space-y-1">
           <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3 px-2">Attack type</div>
           <button
             onClick={() => setSelected(null)}
