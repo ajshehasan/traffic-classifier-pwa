@@ -4,6 +4,7 @@ import { loadModel } from './model'
 import { prefs } from './prefs'
 import { scheduleQuizReminder } from './notifications'
 import Header from './components/Header'
+import InstallBanner from './components/InstallBanner'
 import Home from './pages/Home'
 import Learn from './pages/Learn'
 import Quiz from './pages/Quiz'
@@ -23,6 +24,7 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
         <Header />
+        <InstallBanner />
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
