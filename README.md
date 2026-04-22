@@ -6,6 +6,8 @@
 ![PWA](https://img.shields.io/badge/PWA-ready-5a0fc8?logo=pwa)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+**Live demo → [traffic-classifier-pwa.vercel.app](https://traffic-classifier-pwa.vercel.app)**
+
 A Progressive Web App that classifies network traffic connections as **benign** or **web attack** using a real neural network trained on the CIC-IDS-2017 dataset. Built for a master's course in Advanced Web Applications. Runs entirely in the browser — no backend, no server.
 
 ---
