@@ -35,12 +35,22 @@ export async function loadModel(): Promise<void> {
       fetch('/model/preprocessing.json'),
       getTF(),
     ])
-    meta = await metaRes.json() as PreprocessingMeta
+    const loadedMeta = await metaRes.json() as PreprocessingMeta
     model = await tfLib.loadLayersModel('/model/model.json')
+    // Only expose meta if the model itself loaded successfully
+    meta = loadedMeta
   } catch (err) {
     console.warn('[model] Failed to load real model — using rule-based fallback.', err)
     useFallback = true
   }
+}
+
+export function isRealModelActive(): boolean {
+  return model !== null && !useFallback
+}
+
+export function isFallbackActive(): boolean {
+  return useFallback
 }
 
 export function getModelMeta(): PreprocessingMeta | null {
@@ -187,25 +197,88 @@ async function realClassify(
   input.dispose()
   output.dispose()
 
-  const [p0, p1] = probs
-  const probabilities: Record<AttackClass, number> = { benign: p0, web_attack: p1 }
+  let [p0, p1] = probs
+
+  // Tier 1: strong rule override — bypasses model entirely
+  const override = getStrongOverride(features)
+  if (override) {
+    const conf = override.confidence
+    return {
+      top: 'web_attack',
+      confidence: conf,
+      probabilities: { benign: 1 - conf, web_attack: conf },
+      features_that_fired: [override.reason, ...buildReasons(features, 'web_attack', 'model')],
+    }
+  }
+
+  // Tier 2: subtle signal blending — nudges model when it is unsure
+  const subtle = getSubtleSignal(features)
+  let source: 'model' | 'hybrid' = 'model'
+  if (subtle && p1 < 0.6) {
+    p1 = Math.max(p1, subtle.score)
+    p0 = 1 - p1
+    source = 'hybrid'
+  }
+
   const top: AttackClass = p1 > p0 ? 'web_attack' : 'benign'
+  const confidence = top === 'web_attack' ? p1 : p0
+  const reasons = buildReasons(features, top, source)
+  if (source === 'hybrid' && subtle)
+    reasons.unshift(subtle.reason)
 
   return {
     top,
-    confidence: top === 'web_attack' ? p1 : p0,
-    probabilities,
-    features_that_fired: buildReasons(features, top),
+    confidence,
+    probabilities: { benign: p0, web_attack: p1 },
+    features_that_fired: reasons,
   }
 }
 
-function buildReasons(features: ConnectionFeatures, top: AttackClass): string[] {
+interface StrongOverride {
+  reason: string
+  confidence: number
+}
+
+interface SubtleSignal {
+  reason: string
+  score: number
+}
+
+function getStrongOverride(features: ConnectionFeatures): StrongOverride | null {
+  const uri = (features.http_uri ?? '').toLowerCase()
+  const ua  = (features.http_user_agent ?? '').toLowerCase()
+  const sqlTokens = ['select', 'union', "'--", 'or 1=1', 'pg_sleep', 'waitfor', 'drop table', 'insert into']
+  if (sqlTokens.some(t => uri.includes(t)))
+    return { reason: 'Rule match: SQL injection pattern in URI', confidence: 0.95 }
+  if (uri.includes('<script') || uri.includes('onerror=') || uri.includes('alert('))
+    return { reason: 'Rule match: XSS payload in URI', confidence: 0.95 }
+  if (uri.includes('../') || uri.includes('/etc/passwd'))
+    return { reason: 'Rule match: Path traversal sequence in URI', confidence: 0.95 }
+  if (uri.includes('/cmd.php') || uri.includes('exec(') || uri.includes('system('))
+    return { reason: 'Rule match: Web shell / remote command execution pattern', confidence: 0.95 }
+  if (ua.includes('sqlmap') || ua.includes('nikto') || ua.includes('nmap') || ua.includes('hydra'))
+    return { reason: `Rule match: Known attack tool in User-Agent (${ua.split('/')[0]})`, confidence: 0.95 }
+  return null
+}
+
+function getSubtleSignal(features: ConnectionFeatures): SubtleSignal | null {
+  const uri = (features.http_uri ?? '').toLowerCase()
+  if (features.http_status_code === 404 && (features.duration ?? 1) < 0.05)
+    return { reason: 'Subtle signal: Rapid 404 responses (scanner behaviour)', score: 0.78 }
+  if ((uri.includes('/login') || uri.includes('/wp-login')) && features.http_status_code === 401)
+    return { reason: 'Subtle signal: Repeated login failures (credential stuffing)', score: 0.82 }
+  if (uri.includes('%27') || uri.includes('%3c') || uri.includes('%2e%2e'))
+    return { reason: 'Subtle signal: URL-encoded attack characters in URI', score: 0.80 }
+  return null
+}
+
+function buildReasons(features: ConnectionFeatures, top: AttackClass, source: 'rule' | 'model' | 'hybrid' = 'model'): string[] {
   const uri = (features.http_uri ?? '').toLowerCase()
   const ua  = (features.http_user_agent ?? '').toLowerCase()
   const fired: string[] = []
 
   if (top === 'benign') {
-    fired.push('No suspicious patterns — connection matches normal traffic profile')
+    fired.push('Neural network: No suspicious patterns — connection matches normal traffic profile')
     return fired
   }
 
@@ -223,8 +296,12 @@ function buildReasons(features: ConnectionFeatures, top: AttackClass): string[] 
   if (ua.includes('sqlmap') || ua.includes('nikto') || ua.includes('hydra') || ua.includes('nmap'))
     fired.push(`Attack tool user-agent detected: ${ua.split('/')[0]}`)
 
-  if (fired.length === 0)
-    fired.push('Model detected web attack pattern in network flow characteristics')
+  if (fired.length === 0) {
+    fired.push('Neural network: Anomalous flow statistics detected')
+  } else {
+    const prefix = source === 'hybrid' ? 'Hybrid: rule signal + model confirmation —' : source === 'rule' ? 'Rule match:' : 'Neural network:'
+    fired[0] = `${prefix} ${fired[0]}`
+  }
 
   return fired
 }

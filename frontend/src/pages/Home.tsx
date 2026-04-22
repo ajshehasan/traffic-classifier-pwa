@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { classify, getModelMeta } from '../model'
+import { classify, getModelMeta, isRealModelActive, isFallbackActive } from '../model'
 import { randomExample } from '../data/examples'
 import type { Prediction } from '../types'
 import type { Example } from '../data/examples'
@@ -35,13 +35,17 @@ export default function Home() {
 
   useEffect(() => {
     pickRandom()
-    // Show model status after it loads
-    setTimeout(() => {
-      const m = getModelMeta()
-      setModelLabel(m
-        ? `Real model loaded · ${(m.test_accuracy * 100).toFixed(0)}% accuracy · ${m.dataset}`
-        : 'Rule-based fallback active')
-    }, 600)
+    // Poll until model finishes loading (max ~3s)
+    const check = setInterval(() => {
+      if (isRealModelActive()) {
+        const m = getModelMeta()!
+        setModelLabel(`Real model loaded · ${(m.test_accuracy * 100).toFixed(0)}% accuracy · ${m.dataset}`)
+        clearInterval(check)
+      } else if (isFallbackActive()) {
+        setModelLabel('Rule-based fallback active — model failed to load')
+        clearInterval(check)
+      }
+    }, 300)
     async function loadStats() {
       const [answers, weekClasses] = await Promise.all([getQuizAnswers(), getClassificationsThisWeek()])
       const accuracy = answers.length > 0

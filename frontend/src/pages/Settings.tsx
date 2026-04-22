@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { prefs, type Theme, type Difficulty } from '../prefs'
 import { clearClassifications, clearQuizAnswers, countClassifications, countQuizAnswers } from '../db'
 import { requestNotificationPermission, scheduleQuizReminder } from '../notifications'
+import { isRealModelActive, isFallbackActive, getModelMeta } from '../model'
 
 export default function Settings() {
   const [notif, setNotif] = useState(prefs.notificationsEnabled)
@@ -10,7 +11,21 @@ export default function Settings() {
   const [reveal, setReveal] = useState(prefs.revealModelPrediction)
   const [clsCount, setClsCount] = useState(0)
   const [quizCount, setQuizCount] = useState(0)
-  const [modelStatus] = useState('Stub model active (no real model loaded)')
+  const [modelStatus, setModelStatus] = useState('Loading…')
+
+  useEffect(() => {
+    const check = setInterval(() => {
+      if (isRealModelActive()) {
+        const m = getModelMeta()!
+        setModelStatus(`Real model active · ${(m.test_accuracy * 100).toFixed(0)}% accuracy · ${m.dataset}`)
+        clearInterval(check)
+      } else if (isFallbackActive()) {
+        setModelStatus('Rule-based fallback active — model failed to load')
+        clearInterval(check)
+      }
+    }, 300)
+    return () => clearInterval(check)
+  }, [])
 
   useEffect(() => {
     Promise.all([countClassifications(), countQuizAnswers()]).then(([c, q]) => {
