@@ -15,15 +15,13 @@ import Settings from './pages/Settings'
 function App() {
   useEffect(() => {
     loadModel()
-    // Apply saved theme
     if (prefs.theme === 'dark') document.documentElement.classList.add('dark')
-    // Schedule quiz reminder if enabled
     if (prefs.notificationsEnabled) scheduleQuizReminder(prefs.streakDays)
   }, [])
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
         <Header />
         <main>
           <Routes>

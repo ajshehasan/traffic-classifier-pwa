@@ -11,7 +11,7 @@ const NAV = [
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+    <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 shadow-sm">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-14">
           <NavLink to="/" className="flex items-center gap-2 font-semibold text-red-600 text-sm shrink-0">
@@ -28,8 +28,8 @@ export default function Header() {
                 className={({ isActive }) =>
                   `px-3 py-1.5 rounded text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-red-50 text-red-600'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                      ? 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`
                 }
               >
@@ -41,7 +41,7 @@ export default function Header() {
           <NavLink
             to="/settings"
             className={({ isActive }) =>
-              `p-2 rounded transition-colors ${isActive ? 'text-red-600 bg-red-50' : 'text-slate-400 hover:text-slate-700'}`
+              `p-2 rounded transition-colors ${isActive ? 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30' : 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`
             }
             title="Settings"
           >

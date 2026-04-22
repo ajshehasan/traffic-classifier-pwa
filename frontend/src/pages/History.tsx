@@ -57,8 +57,8 @@ export default function History() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">History</h1>
-        <span className="text-sm text-slate-400">{filtered.length} records</span>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">History</h1>
+        <span className="text-sm text-slate-400 dark:text-slate-500">{filtered.length} records</span>
       </div>
 
       {/* Filter pills */}
@@ -68,7 +68,9 @@ export default function History() {
             key={f}
             onClick={() => { setFilter(f); setPage(1) }}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              filter === f ? 'bg-slate-900 text-white' : 'border border-slate-200 text-slate-600 hover:bg-slate-50'
+              filter === f
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'
+                : 'border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
             }`}
           >
             {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -77,39 +79,39 @@ export default function History() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="bg-slate-50 dark:bg-slate-700/50 border-b border-slate-200 dark:border-slate-700">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">When</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Input</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Verdict</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Confidence</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Source</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">When</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Input</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Verdict</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Confidence</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Source</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
               {visible.length === 0 ? (
-                <tr><td colSpan={5} className="px-4 py-8 text-center text-slate-400 text-sm">No records yet. Start classifying or take a quiz!</td></tr>
+                <tr><td colSpan={5} className="px-4 py-8 text-center text-slate-400 dark:text-slate-500 text-sm">No records yet. Start classifying or take a quiz!</td></tr>
               ) : visible.map(row => (
-                <tr key={row.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">
+                <tr key={row.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/40">
+                  <td className="px-4 py-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">
                     {new Date(row.timestamp).toLocaleString()}
                   </td>
-                  <td className="px-4 py-3 font-mono text-xs text-slate-700 max-w-xs truncate" title={row.uri}>
+                  <td className="px-4 py-3 font-mono text-xs text-slate-700 dark:text-slate-300 max-w-xs truncate" title={row.uri}>
                     {row.uri}
                   </td>
                   <td className="px-4 py-3">
                     <VerdictChip label={row.verdict} size="sm" />
                   </td>
-                  <td className="px-4 py-3 text-slate-600 text-xs">
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-400 text-xs">
                     {(row.confidence * 100).toFixed(0)}%
                   </td>
                   <td className="px-4 py-3 text-xs">
                     <span className={`font-medium ${
-                      row.source === 'classified' ? 'text-slate-600' :
-                      row.source === 'quiz ✓' ? 'text-green-600' : 'text-red-500'
+                      row.source === 'classified' ? 'text-slate-600 dark:text-slate-400' :
+                      row.source === 'quiz ✓' ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'
                     }`}>
                       {row.source}
                     </span>
@@ -120,10 +122,10 @@ export default function History() {
           </table>
         </div>
         {visible.length < filtered.length && (
-          <div className="px-4 py-3 border-t border-slate-100 text-center">
+          <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700 text-center">
             <button
               onClick={() => setPage(p => p + 1)}
-              className="text-sm text-red-600 hover:underline font-medium"
+              className="text-sm text-red-600 dark:text-red-400 hover:underline font-medium"
             >
               Load more ({filtered.length - visible.length} remaining)
             </button>

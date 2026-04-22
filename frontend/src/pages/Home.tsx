@@ -35,7 +35,6 @@ export default function Home() {
 
   useEffect(() => {
     pickRandom()
-    // Poll until model finishes loading (max ~3s)
     const check = setInterval(() => {
       if (isRealModelActive()) {
         const m = getModelMeta()!
@@ -66,22 +65,22 @@ export default function Home() {
       {/* Hero */}
       <div className="grid lg:grid-cols-2 gap-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 mb-1">Live Classification</h1>
-          <p className="text-slate-500 text-sm mb-4">Model running in your browser on a random example connection</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">Live Classification</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">Model running in your browser on a random example connection</p>
           {example && <ConnectionCard features={example.features} />}
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5 space-y-4">
           {loading ? (
-            <div className="text-slate-400 text-sm animate-pulse">Classifying…</div>
+            <div className="text-slate-400 dark:text-slate-500 text-sm animate-pulse">Classifying…</div>
           ) : prediction ? (
             <>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-slate-700">Verdict</span>
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Verdict</span>
                 <VerdictChip label={prediction.top} size="lg" />
               </div>
               <div>
-                <span className="text-xs text-slate-500 uppercase tracking-wide">Top 3 probabilities</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Top 3 probabilities</span>
                 <div className="mt-2">
                   <ProbabilityBars probabilities={prediction.probabilities} topN={3} />
                 </div>
@@ -95,13 +94,13 @@ export default function Home() {
                 </button>
                 <button
                   onClick={() => setShowWhy(v => !v)}
-                  className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors"
+                  className="px-4 py-2 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                 >
                   {showWhy ? 'Hide' : 'Why this verdict?'}
                 </button>
               </div>
               {showWhy && (
-                <ul className="text-sm text-slate-600 space-y-1 border-t border-slate-100 pt-3">
+                <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1 border-t border-slate-100 dark:border-slate-700 pt-3">
                   {prediction.features_that_fired.map((f, i) => (
                     <li key={i} className="flex gap-2">
                       <span className="text-red-500 shrink-0">›</span>
@@ -134,39 +133,39 @@ export default function Home() {
       <div className="grid sm:grid-cols-2 gap-4">
         <button
           onClick={() => navigate('/classify')}
-          className="text-left border border-slate-200 rounded-xl p-5 hover:border-red-300 hover:bg-red-50 transition-colors group"
+          className="text-left border border-slate-200 dark:border-slate-700 rounded-xl p-5 hover:border-red-300 dark:hover:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors group"
         >
-          <div className="font-semibold text-slate-900 group-hover:text-red-700">Classify a connection</div>
-          <div className="text-sm text-slate-500 mt-1">Enter connection fields and get a prediction</div>
+          <div className="font-semibold text-slate-900 dark:text-white group-hover:text-red-700 dark:group-hover:text-red-400">Classify a connection</div>
+          <div className="text-sm text-slate-500 dark:text-slate-400 mt-1">Enter connection fields and get a prediction</div>
         </button>
         <button
           onClick={() => navigate('/learn')}
-          className="text-left border border-slate-200 rounded-xl p-5 hover:border-slate-400 hover:bg-slate-50 transition-colors"
+          className="text-left border border-slate-200 dark:border-slate-700 rounded-xl p-5 hover:border-slate-400 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
         >
-          <div className="font-semibold text-slate-900">Browse examples</div>
-          <div className="text-sm text-slate-500 mt-1">Study 30 real attack patterns by type</div>
+          <div className="font-semibold text-slate-900 dark:text-white">Browse examples</div>
+          <div className="text-sm text-slate-500 dark:text-slate-400 mt-1">Study 30 real attack patterns by type</div>
         </button>
       </div>
 
       {/* Stat mini-cards */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-slate-900">{stats.accuracy}%</div>
-          <div className="text-xs text-slate-500 mt-1">Quiz accuracy</div>
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-center">
+          <div className="text-2xl font-bold text-slate-900 dark:text-white">{stats.accuracy}%</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Quiz accuracy</div>
         </div>
-        <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-slate-900">{stats.weekScans}</div>
-          <div className="text-xs text-slate-500 mt-1">Scans this week</div>
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-center">
+          <div className="text-2xl font-bold text-slate-900 dark:text-white">{stats.weekScans}</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Scans this week</div>
         </div>
-        <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
-          <div className="text-sm font-bold text-slate-900 font-mono truncate">{stats.weakSpot}</div>
-          <div className="text-xs text-slate-500 mt-1">Weak spot</div>
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-center">
+          <div className="text-sm font-bold text-slate-900 dark:text-white font-mono truncate">{stats.weakSpot}</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Weak spot</div>
         </div>
       </div>
 
       {/* Model status */}
       <div className="text-center">
-        <span className="inline-block text-xs font-mono text-slate-400 bg-slate-100 px-3 py-1.5 rounded-full">
+        <span className="inline-block text-xs font-mono text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full">
           {modelLabel}
         </span>
       </div>

@@ -77,12 +77,12 @@ export default function Settings() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
-      <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Settings</h1>
 
       {/* Preferences */}
-      <section className="bg-white border border-slate-200 rounded-xl divide-y divide-slate-100">
-        <div className="px-5 py-3 bg-slate-50 rounded-t-xl">
-          <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+      <section className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl divide-y divide-slate-100 dark:divide-slate-700">
+        <div className="px-5 py-3 bg-slate-50 dark:bg-slate-700/50 rounded-t-xl">
+          <h2 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
             Preferences · saved in localStorage
           </h2>
         </div>
@@ -90,12 +90,12 @@ export default function Settings() {
         {/* Notifications */}
         <div className="px-5 py-4 flex items-center justify-between">
           <div>
-            <div className="text-sm font-medium text-slate-900">Daily quiz reminder</div>
-            <div className="text-xs text-slate-500">Sends a notification at 18:00 if you haven't quizzed today</div>
+            <div className="text-sm font-medium text-slate-900 dark:text-white">Daily quiz reminder</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Sends a notification at 18:00 if you haven't quizzed today</div>
           </div>
           <button
             onClick={handleNotifToggle}
-            className={`${toggleCls} ${notif ? 'bg-red-600' : 'bg-slate-200'}`}
+            className={`${toggleCls} ${notif ? 'bg-red-600' : 'bg-slate-200 dark:bg-slate-600'}`}
             role="switch" aria-checked={notif}
           >
             <span className={`${knobCls} ${notif ? 'translate-x-5' : 'translate-x-0'}`} />
@@ -104,14 +104,16 @@ export default function Settings() {
 
         {/* Theme */}
         <div className="px-5 py-4">
-          <div className="text-sm font-medium text-slate-900 mb-2">Theme</div>
+          <div className="text-sm font-medium text-slate-900 dark:text-white mb-2">Theme</div>
           <div className="flex gap-2">
             {(['light', 'dark', 'auto'] as Theme[]).map(t => (
               <button
                 key={t}
                 onClick={() => handleTheme(t)}
                 className={`px-4 py-1.5 rounded-lg text-sm border transition-colors ${
-                  theme === t ? 'bg-slate-900 text-white border-slate-900' : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  theme === t
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white'
+                    : 'border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
               >
                 {t.charAt(0).toUpperCase() + t.slice(1)}
@@ -122,15 +124,17 @@ export default function Settings() {
 
         {/* Difficulty */}
         <div className="px-5 py-4">
-          <div className="text-sm font-medium text-slate-900 mb-1">Quiz difficulty</div>
-          <div className="text-xs text-slate-500 mb-2">Number of answer choices shown per question</div>
+          <div className="text-sm font-medium text-slate-900 dark:text-white mb-1">Quiz difficulty</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400 mb-2">Number of answer choices shown per question</div>
           <div className="flex gap-2">
             {([3, 6, 9] as Difficulty[]).map(d => (
               <button
                 key={d}
                 onClick={() => handleDifficulty(d)}
                 className={`px-4 py-1.5 rounded-lg text-sm border transition-colors ${
-                  difficulty === d ? 'bg-slate-900 text-white border-slate-900' : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  difficulty === d
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white'
+                    : 'border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
               >
                 {d === 3 ? 'Easy (3)' : d === 6 ? 'Medium (6)' : 'Hard (9)'}
@@ -142,12 +146,12 @@ export default function Settings() {
         {/* Reveal model prediction */}
         <div className="px-5 py-4 flex items-center justify-between">
           <div>
-            <div className="text-sm font-medium text-slate-900">Reveal model prediction after quiz</div>
-            <div className="text-xs text-slate-500">Shows what the model predicted alongside the correct answer</div>
+            <div className="text-sm font-medium text-slate-900 dark:text-white">Reveal model prediction after quiz</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Shows what the model predicted alongside the correct answer</div>
           </div>
           <button
             onClick={() => handleReveal(!reveal)}
-            className={`${toggleCls} ${reveal ? 'bg-red-600' : 'bg-slate-200'}`}
+            className={`${toggleCls} ${reveal ? 'bg-red-600' : 'bg-slate-200 dark:bg-slate-600'}`}
             role="switch" aria-checked={reveal}
           >
             <span className={`${knobCls} ${reveal ? 'translate-x-5' : 'translate-x-0'}`} />
@@ -156,32 +160,32 @@ export default function Settings() {
       </section>
 
       {/* Data */}
-      <section className="bg-white border border-slate-200 rounded-xl divide-y divide-slate-100">
-        <div className="px-5 py-3 bg-slate-50 rounded-t-xl">
-          <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+      <section className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl divide-y divide-slate-100 dark:divide-slate-700">
+        <div className="px-5 py-3 bg-slate-50 dark:bg-slate-700/50 rounded-t-xl">
+          <h2 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
             Data · stored in IndexedDB
           </h2>
         </div>
 
         <div className="px-5 py-4 flex items-center justify-between">
           <div>
-            <div className="text-sm font-medium text-slate-900">Classification history</div>
-            <div className="text-xs text-slate-500">{clsCount} records stored</div>
+            <div className="text-sm font-medium text-slate-900 dark:text-white">Classification history</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">{clsCount} records stored</div>
           </div>
-          <button onClick={handleClearCls} className="text-sm text-red-600 hover:underline font-medium">Clear</button>
+          <button onClick={handleClearCls} className="text-sm text-red-600 dark:text-red-400 hover:underline font-medium">Clear</button>
         </div>
 
         <div className="px-5 py-4 flex items-center justify-between">
           <div>
-            <div className="text-sm font-medium text-slate-900">Quiz history</div>
-            <div className="text-xs text-slate-500">{quizCount} answers stored</div>
+            <div className="text-sm font-medium text-slate-900 dark:text-white">Quiz history</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">{quizCount} answers stored</div>
           </div>
-          <button onClick={handleClearQuiz} className="text-sm text-red-600 hover:underline font-medium">Clear</button>
+          <button onClick={handleClearQuiz} className="text-sm text-red-600 dark:text-red-400 hover:underline font-medium">Clear</button>
         </div>
 
         <div className="px-5 py-4">
-          <div className="text-sm font-medium text-slate-900 mb-1">Model status</div>
-          <div className="text-xs text-slate-500 font-mono">{modelStatus}</div>
+          <div className="text-sm font-medium text-slate-900 dark:text-white mb-1">Model status</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400 font-mono">{modelStatus}</div>
         </div>
       </section>
     </div>

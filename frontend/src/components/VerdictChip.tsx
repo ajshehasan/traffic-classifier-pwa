@@ -1,8 +1,8 @@
 import type { AttackClass } from '../types'
 
 const palette: Record<AttackClass, string> = {
-  benign:     'bg-green-50 text-green-700 border-green-200',
-  web_attack: 'bg-red-50 text-red-700 border-red-200',
+  benign:     'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800',
+  web_attack: 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800',
 }
 
 interface Props {

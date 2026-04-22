@@ -19,14 +19,14 @@ export default function ProbabilityBars({ probabilities, topN = 3 }: Props) {
     <div className="space-y-2">
       {sorted.map(([cls, prob]) => (
         <div key={cls} className="flex items-center gap-3">
-          <span className="font-mono text-xs text-slate-500 w-20 shrink-0">{cls}</span>
-          <div className="flex-1 bg-slate-100 rounded-full h-2.5 overflow-hidden">
+          <span className="font-mono text-xs text-slate-500 dark:text-slate-400 w-20 shrink-0">{cls}</span>
+          <div className="flex-1 bg-slate-100 dark:bg-slate-700 rounded-full h-2.5 overflow-hidden">
             <div
               className={`h-full rounded-full transition-all ${barColor[cls]}`}
               style={{ width: `${(prob * 100).toFixed(1)}%` }}
             />
           </div>
-          <span className="text-xs text-slate-600 w-12 text-right shrink-0">
+          <span className="text-xs text-slate-600 dark:text-slate-300 w-12 text-right shrink-0">
             {(prob * 100).toFixed(1)}%
           </span>
         </div>
