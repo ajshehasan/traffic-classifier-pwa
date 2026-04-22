@@ -27,5 +27,5 @@ tcp,http,0.02,260,240,GET,/page?id=<script>alert(document.cookie)</script>,200,M
 tcp,http,0.01,300,280,GET,/search?q=<img src=x onerror=alert(1)>,200,Mozilla/5.0 Firefox/115.0
 tcp,http,0.02,340,300,POST,/comment?text=javascript:alert('XSS'),200,Mozilla/5.0 Chrome/118.0
 tcp,http,0.02,240,220,GET,/files?path=../../etc/passwd,200,Mozilla/5.0 Firefox/112.0
-tcp,http,0.01,270,250,GET,/download?file=/windows/system32/config/sam,200,Mozilla/5.0 Chrome/114.0
+tcp,http,0.01,270,250,GET,/download?file=../../windows/system32/config/sam,200,Mozilla/5.0 Chrome/114.0
 tcp,http,0.02,310,290,GET,/admin/exec?cmd=;ls -la,200,sqlmap/1.7.8#stable (https://sqlmap.org)
