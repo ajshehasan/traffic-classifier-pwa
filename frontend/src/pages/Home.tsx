@@ -72,7 +72,7 @@ export default function Home() {
 
         <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5 space-y-4">
           {loading ? (
-            <div className="text-slate-400 dark:text-slate-500 text-sm animate-pulse">Classifying…</div>
+            <div className="text-slate-500 dark:text-slate-400 text-sm animate-pulse">Classifying…</div>
           ) : prediction ? (
             <>
               <div className="flex items-center justify-between">
@@ -165,7 +165,7 @@ export default function Home() {
 
       {/* Model status */}
       <div className="text-center">
-        <span className="inline-block text-xs font-mono text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full">
+        <span className="inline-block text-xs font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full">
           {modelLabel}
         </span>
       </div>

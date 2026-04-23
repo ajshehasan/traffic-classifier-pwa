@@ -328,7 +328,7 @@ export default function Classify() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
               </svg>
               <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Drop a CSV file or <span className="text-red-600 dark:text-red-400">click to browse</span></p>
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Max {MAX_ROWS} rows</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Max {MAX_ROWS} rows</p>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -365,11 +365,11 @@ export default function Classify() {
               </button>
               {showFormat && (
                 <div className="mt-2 bg-slate-50 dark:bg-slate-900/50 rounded-lg p-3 text-xs font-mono text-slate-600 dark:text-slate-400 overflow-x-auto">
-                  <div className="text-slate-400 dark:text-slate-500 mb-1">Required columns (header row must be present):</div>
+                  <div className="text-slate-500 dark:text-slate-400 mb-1">Required columns (header row must be present):</div>
                   <div>proto, service, duration, src_bytes, dst_bytes</div>
-                  <div className="text-slate-400 dark:text-slate-500 mt-1">Optional columns:</div>
+                  <div className="text-slate-500 dark:text-slate-400 mt-1">Optional columns:</div>
                   <div>http_method, http_uri, http_status_code, http_user_agent</div>
-                  <div className="text-slate-400 dark:text-slate-500 mt-1">proto values: tcp | udp | icmp</div>
+                  <div className="text-slate-500 dark:text-slate-400 mt-1">proto values: tcp | udp | icmp</div>
                 </div>
               )}
             </div>
@@ -457,7 +457,7 @@ export default function Classify() {
                             row.prediction.top === 'web_attack' ? 'bg-red-50/40 dark:bg-red-900/10' : ''
                           }`}
                         >
-                          <td className="px-3 py-2.5 text-xs text-slate-400 dark:text-slate-500">{row.index}</td>
+                          <td className="px-3 py-2.5 text-xs text-slate-500 dark:text-slate-400">{row.index}</td>
                           <td className="px-3 py-2.5 text-xs font-mono text-slate-600 dark:text-slate-400">{row.features.http_method ?? '—'}</td>
                           <td className="px-3 py-2.5 font-mono text-xs text-slate-700 dark:text-slate-300 max-w-[180px] truncate" title={row.features.http_uri}>
                             {row.features.http_uri || '—'}

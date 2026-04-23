@@ -63,7 +63,7 @@ export default function Learn() {
             <h1 className="text-xl font-bold text-slate-900 dark:text-white">
               {selected ? `${selected} examples` : 'All examples'}
             </h1>
-            <span className="text-sm text-slate-400 dark:text-slate-500">{visible.length} connections</span>
+            <span className="text-sm text-slate-500 dark:text-slate-400">{visible.length} connections</span>
           </div>
           {visible.map(ex => (
             <div key={ex.id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3">

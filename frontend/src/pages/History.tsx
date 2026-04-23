@@ -79,7 +79,7 @@ export default function History() {
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">History</h1>
-        <span className="text-sm text-slate-400 dark:text-slate-500">{filtered.length} records</span>
+        <span className="text-sm text-slate-500 dark:text-slate-400">{filtered.length} records</span>
       </div>
 
       {/* Filter pills */}
@@ -107,7 +107,7 @@ export default function History() {
       {/* Batch grouped view */}
       {filter === 'batch' ? (
         batchGroups.length === 0 ? (
-          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-8 text-center text-slate-400 dark:text-slate-500 text-sm">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-8 text-center text-slate-500 dark:text-slate-400 text-sm">
             No batch uploads yet. Use the CSV upload on the Classify page.
           </div>
         ) : (
@@ -142,7 +142,7 @@ export default function History() {
                       <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                         {group.rows.map((row, i) => (
                           <tr key={row.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/40">
-                            <td className="px-4 py-2 text-xs text-slate-400 dark:text-slate-500">{i + 1}</td>
+                            <td className="px-4 py-2 text-xs text-slate-500 dark:text-slate-400">{i + 1}</td>
                             <td className="px-4 py-2 font-mono text-xs text-slate-700 dark:text-slate-300 max-w-xs truncate" title={row.uri}>{row.uri}</td>
                             <td className="px-4 py-2"><VerdictChip label={row.verdict} size="sm" /></td>
                             <td className="px-4 py-2 text-xs text-slate-600 dark:text-slate-400">{(row.confidence * 100).toFixed(0)}%</td>
@@ -172,7 +172,7 @@ export default function History() {
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                 {visible.length === 0 ? (
-                  <tr><td colSpan={5} className="px-4 py-8 text-center text-slate-400 dark:text-slate-500 text-sm">No records yet. Start classifying or take a quiz!</td></tr>
+                  <tr><td colSpan={5} className="px-4 py-8 text-center text-slate-500 dark:text-slate-400 text-sm">No records yet. Start classifying or take a quiz!</td></tr>
                 ) : visible.map(row => (
                   <tr key={row.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/40">
                     <td className="px-4 py-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">

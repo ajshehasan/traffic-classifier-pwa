@@ -86,7 +86,7 @@ export default function Stats() {
             <table className="text-xs font-mono border-collapse">
               <thead>
                 <tr>
-                  <th className="p-1 text-slate-400 dark:text-slate-500 text-left w-20">actual ↓ / pred →</th>
+                  <th className="p-1 text-slate-500 dark:text-slate-400 text-left w-20">actual ↓ / pred →</th>
                   {TOP_CLASSES.map(c => (
                     <th key={c} className="p-1 text-center text-slate-500 dark:text-slate-400 w-14">{c.slice(0, 4)}</th>
                   ))}
@@ -125,7 +125,7 @@ export default function Stats() {
                   className="w-full bg-red-500 rounded-t transition-all"
                   style={{ height: `${(count / maxBar) * 130}px`, minHeight: count > 0 ? 4 : 0 }}
                 />
-                <span className="text-xs text-slate-400 dark:text-slate-500">{day}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">{day}</span>
               </div>
             ))}
           </div>
