@@ -7,10 +7,15 @@ export async function requestNotificationPermission(): Promise<boolean> {
   return result === 'granted'
 }
 
+let reminderScheduled = false
+
 export function scheduleQuizReminder(streak: number): void {
+  if (reminderScheduled) return
   if (!prefs.notificationsEnabled) return
   if (!('serviceWorker' in navigator)) return
   if (prefs.lastQuizDate === todayString()) return
+
+  reminderScheduled = true
 
   const now = new Date()
   const reminder = new Date()
@@ -21,6 +26,7 @@ export function scheduleQuizReminder(streak: number): void {
     : 0
 
   setTimeout(async () => {
+    if (prefs.lastQuizDate === todayString()) return
     const reg = await navigator.serviceWorker.ready
     reg.showNotification("Time for today's quiz", {
       body: `Classify 10 connections to keep your streak (${streak} days)`,
