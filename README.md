@@ -12,6 +12,23 @@ A Progressive Web App that classifies network traffic connections as **benign** 
 
 ---
 
+## Screenshots
+
+![Home — live classification](screenshots/home.png)
+
+<table>
+  <tr>
+    <td><img src="screenshots/classify.png" alt="Classify — CSV batch upload"/><br/><sub><b>CSV batch classification</b></sub></td>
+    <td><img src="screenshots/stats.png" alt="Stats — confusion matrix and activity"/><br/><sub><b>Stats — confusion matrix &amp; 7-day activity</b></sub></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/learn.png" alt="Learn — browse examples"/><br/><sub><b>Learn — browse attack examples</b></sub></td>
+    <td><img src="screenshots/settings.png" alt="Settings — preferences and model status"/><br/><sub><b>Settings — preferences &amp; model status</b></sub></td>
+  </tr>
+</table>
+
+---
+
 ## Tech stack
 
 | Layer | Technology |
