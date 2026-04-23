@@ -12,6 +12,14 @@ A Progressive Web App that classifies network traffic connections as **benign** 
 
 ---
 
+## Demo
+
+▶️ [Watch demo video (1:49)](https://drive.google.com/file/d/1ugJQb8SRABy7AkzHLy4hjh1VotJDh5xG/view?usp=sharing)
+
+[Live app](https://traffic-classifier-pwa.vercel.app) | [GitHub](https://github.com/ajshehasan/traffic-classifier-pwa)
+
+---
+
 ## Screenshots
 
 ![Home — live classification](screenshots/home.png)
