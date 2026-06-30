@@ -1,0 +1,12 @@
+{
+  "name": "traffic-classifier-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Log generator for traffic-classifier-pwa demo",
+  "scripts": {
+    "start": "node --env-file=.env log-generator.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.4"
+  }
+}
