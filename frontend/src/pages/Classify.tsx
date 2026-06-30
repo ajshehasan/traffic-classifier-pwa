@@ -283,11 +283,11 @@ export default function Classify() {
             <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 space-y-5">
               <div className="flex items-center justify-between">
                 <span className="font-semibold text-slate-900 dark:text-white">Result</span>
-                <VerdictChip label={prediction.top} size="lg" />
+                <VerdictChip label={prediction.predictedClass ?? prediction.top} size="lg" />
               </div>
               <div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Probabilities</p>
-                <ProbabilityBars probabilities={prediction.probabilities} topN={5} />
+                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Class probabilities</p>
+                <ProbabilityBars probabilities={prediction.classProbabilities ?? prediction.probabilities} topN={5} />
               </div>
               <div>
                 <button onClick={() => setShowWhy(v => !v)} className="text-sm text-red-600 dark:text-red-400 hover:underline">

@@ -1,17 +1,15 @@
-import type { AttackClass } from '../types'
-
-const barColor: Record<AttackClass, string> = {
-  benign:     'bg-green-500',
-  web_attack: 'bg-red-600',
-}
+const isBenign = (cls: string): boolean => cls.trim().toUpperCase() === 'BENIGN' || cls === 'benign'
+const barColor = (cls: string): string => (isBenign(cls) ? 'bg-green-500' : 'bg-red-600')
 
 interface Props {
-  probabilities: Record<AttackClass, number>
+  // Works for both the binary { benign, web_attack } map and the model's
+  // multi-class distribution (e.g. { BENIGN, 'Web Attack - XSS', … }).
+  probabilities: Record<string, number>
   topN?: number
 }
 
 export default function ProbabilityBars({ probabilities, topN = 3 }: Props) {
-  const sorted = (Object.entries(probabilities) as [AttackClass, number][])
+  const sorted = Object.entries(probabilities)
     .sort((a, b) => b[1] - a[1])
     .slice(0, topN)
 
@@ -19,10 +17,10 @@ export default function ProbabilityBars({ probabilities, topN = 3 }: Props) {
     <div className="space-y-2">
       {sorted.map(([cls, prob]) => (
         <div key={cls} className="flex items-center gap-3">
-          <span className="font-mono text-xs text-slate-500 dark:text-slate-400 w-20 shrink-0">{cls}</span>
+          <span className="font-mono text-xs text-slate-500 dark:text-slate-400 w-36 shrink-0 truncate" title={cls}>{cls}</span>
           <div className="flex-1 bg-slate-100 dark:bg-slate-700 rounded-full h-2.5 overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all ${barColor[cls]}`}
+              className={`h-full rounded-full transition-all ${barColor(cls)}`}
               style={{ width: `${(prob * 100).toFixed(1)}%` }}
             />
           </div>
