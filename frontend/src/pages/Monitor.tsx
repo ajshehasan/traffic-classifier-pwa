@@ -9,11 +9,11 @@ import { supabase } from '../supabase'
 import type { LiveLog } from '../supabase'
 import { classify } from '../model'
 import { startLogGenerator } from '../logGenerator'
-import type { AttackClass } from '../types'
 
 type AttackType =
   | 'SQL Injection'
   | 'XSS'
+  | 'Brute Force'
   | 'Path Traversal'
   | 'Command Injection'
   | 'Attack Tools'
@@ -28,7 +28,7 @@ interface MonitorEntry {
   method: string
   uri: string
   status: number
-  verdict: AttackClass
+  verdict: string    // multi-class label, e.g. 'BENIGN' / 'Web Attack - XSS' / 'SQL Injection'
   confidence: number
   source: 'Rule' | 'Neural network' | 'Hybrid'
   attackType: AttackType | null
@@ -41,6 +41,7 @@ type ChartRange = 5 | 10 | 30 | 60
 const ATTACK_COLORS: Record<AttackType, string> = {
   'SQL Injection':     '#f87171',
   'XSS':              '#fb923c',
+  'Brute Force':      '#f472b6',
   'Path Traversal':   '#a78bfa',
   'Command Injection':'#facc15',
   'Attack Tools':     '#60a5fa',
@@ -109,6 +110,33 @@ function detectAttackType(uri: string, userAgent: string): AttackType {
   return 'Other'
 }
 
+// A verdict is an attack unless it is explicitly benign. This is more robust than
+// checking for "attack" in the string, since rule verdicts like "SQL Injection" or
+// "Path Traversal" don't contain that word.
+function isAttackVerdict(verdict: string): boolean {
+  return verdict.trim().toLowerCase() !== 'benign'
+}
+
+// For the donut: prefer the model's class label, then fall back to URI/UA heuristics.
+function deriveAttackType(verdict: string, uri: string, userAgent: string): AttackType {
+  if (verdict.includes('XSS')) return 'XSS'
+  if (verdict.includes('Brute Force')) return 'Brute Force'
+  if (verdict.includes('SQL')) return 'SQL Injection'
+  return detectAttackType(uri, userAgent)
+}
+
+// Colour a verdict badge by its specific type (benign green, else per attack type).
+function verdictColor(verdict: string): string {
+  if (!isAttackVerdict(verdict)) return '#16a34a'
+  if (verdict.includes('XSS')) return ATTACK_COLORS['XSS']
+  if (verdict.includes('Brute Force')) return ATTACK_COLORS['Brute Force']
+  if (verdict.includes('SQL')) return ATTACK_COLORS['SQL Injection']
+  if (verdict.includes('Traversal')) return ATTACK_COLORS['Path Traversal']
+  if (verdict.includes('Command') || verdict.includes('Execution')) return ATTACK_COLORS['Command Injection']
+  if (verdict.includes('Tool')) return ATTACK_COLORS['Attack Tools']
+  return '#ef4444'
+}
+
 async function classifyLog(log: LiveLog): Promise<MonitorEntry> {
   const prediction = await classify({
     proto: (log.proto === 'tcp' || log.proto === 'udp' || log.proto === 'icmp'
@@ -122,6 +150,7 @@ async function classifyLog(log: LiveLog): Promise<MonitorEntry> {
     http_status_code: log.status_code,
     http_user_agent: log.user_agent,
   })
+  const verdict = prediction.predictedClass ?? prediction.top
   return {
     id: log.id,
     time: formatTime(log.created_at),
@@ -131,11 +160,11 @@ async function classifyLog(log: LiveLog): Promise<MonitorEntry> {
     method: log.method,
     uri: log.uri,
     status: log.status_code,
-    verdict: prediction.top,
+    verdict,
     confidence: prediction.confidence,
     source: inferSource(prediction.features_that_fired),
-    attackType: prediction.top === 'web_attack'
-      ? detectAttackType(log.uri, log.user_agent) : null,
+    attackType: isAttackVerdict(verdict)
+      ? deriveAttackType(verdict, log.uri, log.user_agent) : null,
   }
 }
 
@@ -256,8 +285,8 @@ export default function Monitor() {
 
   // ── derived data ─────────────────────────────────────────────────────────────
 
-  const attacks = entries.filter(e => e.verdict === 'web_attack')
-  const benign  = entries.filter(e => e.verdict === 'benign')
+  const attacks = entries.filter(e => isAttackVerdict(e.verdict))
+  const benign  = entries.filter(e => !isAttackVerdict(e.verdict))
   const attackRate = entries.length > 0
     ? ((attacks.length / entries.length) * 100).toFixed(1)
     : '0.0'
@@ -274,7 +303,7 @@ export default function Monitor() {
     }
     entries.forEach(e => {
       const b = buckets.find(bk => bk.time === e.minuteKey)
-      if (b) e.verdict === 'web_attack' ? b.attacks++ : b.benign++
+      if (b) isAttackVerdict(e.verdict) ? b.attacks++ : b.benign++
     })
     return buckets
   }, [entries, chartRange])
@@ -396,7 +425,7 @@ export default function Monitor() {
       headStyles: { fillColor: [51, 65, 85] },
       styles: { fontSize: 7 },
       didParseCell: (data) => {
-        if (data.section === 'body' && (data.row.raw as string[])[5] === 'web_attack') {
+        if (data.section === 'body' && isAttackVerdict(String((data.row.raw as string[])[5]))) {
           data.cell.styles.textColor = [239, 68, 68]
         }
       },
@@ -771,7 +800,7 @@ export default function Monitor() {
                 <tr
                   key={e.id}
                   className={`transition-colors ${
-                    e.verdict === 'web_attack'
+                    isAttackVerdict(e.verdict)
                       ? 'bg-red-900/10 hover:bg-red-900/20'
                       : 'hover:bg-slate-50 dark:hover:bg-slate-700/40'
                   }`}
@@ -798,15 +827,13 @@ export default function Monitor() {
                     </span>
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap">
-                    {e.verdict === 'web_attack' ? (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold font-mono border bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800">
-                        web_attack
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold font-mono border bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800">
-                        benign
-                      </span>
-                    )}
+                    <span
+                      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-semibold font-mono border text-slate-700 dark:text-slate-200"
+                      style={{ backgroundColor: `${verdictColor(e.verdict)}1a`, borderColor: `${verdictColor(e.verdict)}59` }}
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: verdictColor(e.verdict) }} />
+                      {e.verdict}
+                    </span>
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap">
                     <span className="text-xs text-slate-400 dark:text-slate-500">{e.source}</span>

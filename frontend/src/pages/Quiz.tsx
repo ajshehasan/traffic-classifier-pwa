@@ -28,7 +28,7 @@ export default function Quiz() {
   const [question, setQuestion] = useState<Example | null>(null)
   const [choices, setChoices] = useState<AttackClass[]>([])
   const [answered, setAnswered] = useState<AttackClass | null>(null)
-  const [modelPred, setModelPred] = useState<{ top: AttackClass; confidence: number } | null>(null)
+  const [modelPred, setModelPred] = useState<{ top: AttackClass; predictedClass?: string; confidence: number } | null>(null)
   const [count, setCount] = useState(0)
   const [correct, setCorrect] = useState(0)
   const [done, setDone] = useState(false)
@@ -54,7 +54,7 @@ export default function Quiz() {
 
     if (reveal) {
       const pred = await classify(question.features)
-      setModelPred({ top: pred.top, confidence: pred.confidence })
+      setModelPred({ top: pred.top, predictedClass: pred.predictedClass, confidence: pred.confidence })
     }
 
     const newCount = count + 1
@@ -165,7 +165,7 @@ export default function Quiz() {
                 {modelPred && (
                   <div>
                     <span className="text-slate-500 dark:text-slate-400">Model: </span>
-                    <VerdictChip label={modelPred.top} size="sm" />
+                    <VerdictChip label={modelPred.predictedClass ?? modelPred.top} size="sm" />
                     <span className="text-slate-400 dark:text-slate-500 text-xs ml-1">({(modelPred.confidence * 100).toFixed(0)}%)</span>
                   </div>
                 )}

@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { AttackClass } from '../types'
 import { getClassifications, getQuizAnswers } from '../db'
 import VerdictChip from '../components/VerdictChip'
 
@@ -11,7 +10,7 @@ interface Row {
   id: string
   timestamp: number
   uri: string
-  verdict: AttackClass
+  verdict: string
   confidence: number
   source: 'classified' | 'quiz ✓' | 'quiz ✗' | 'batch'
   batch_id?: string
@@ -64,7 +63,7 @@ export default function History() {
         id: `c-${c.id}`,
         timestamp: c.timestamp,
         uri: c.features.http_uri ?? c.features.service,
-        verdict: c.prediction.top,
+        verdict: c.prediction.predictedClass ?? c.prediction.top,
         confidence: c.prediction.confidence,
         source: c.source === 'csv_batch' ? 'batch' : 'classified',
         batch_id: c.batch_id,

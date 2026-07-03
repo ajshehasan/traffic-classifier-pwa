@@ -77,12 +77,12 @@ export default function Home() {
             <>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Verdict</span>
-                <VerdictChip label={prediction.top} size="lg" />
+                <VerdictChip label={prediction.predictedClass ?? prediction.top} size="lg" />
               </div>
               <div>
                 <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Top 3 probabilities</span>
                 <div className="mt-2">
-                  <ProbabilityBars probabilities={prediction.probabilities} topN={3} />
+                  <ProbabilityBars probabilities={prediction.classProbabilities ?? prediction.probabilities} topN={3} />
                 </div>
               </div>
               <div className="flex gap-2 flex-wrap">
